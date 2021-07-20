@@ -4,5 +4,8 @@ class Category implements ListItem {
   final String id;
   final String title;
 
-  Category(this.id, this.title);
+  Category({
+    required this.id,
+    required this.title,
+  });
 }

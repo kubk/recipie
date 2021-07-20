@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:recipie/store/recipe-store.dart';
+import 'package:recipie/service/recipe-notifier.dart';
 import '../ui/list-with-previews.dart';
 
 class CategoryListScreen extends StatelessWidget {
@@ -13,13 +13,13 @@ class CategoryListScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Категории'),
       ),
-      body: Consumer<RecipeStore>(
-        builder: (context, recipeStore, child) => ListWithPreviews(
+      body: Consumer<RecipeNotifier>(
+        builder: (context, recipeNotifier, child) => ListWithPreviews(
           onTap: (categoryId) {
-            recipeStore.selectCategory(categoryId);
+            recipeNotifier.selectCategory(categoryId);
             Navigator.pushNamed(context, '/recipes');
           },
-          items: recipeStore.categories,
+          items: recipeNotifier.categories,
         ),
       ),
     );
