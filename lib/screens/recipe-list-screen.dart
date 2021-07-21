@@ -22,6 +22,13 @@ class RecipeListScreen extends StatelessWidget {
           items: recipeNotifier.filteredRecipes,
         ),
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.pushNamed(context, '/recipe-new');
+        },
+        label: const Text('Добавить рецепт'),
+        icon: const Icon(Icons.add),
+      ),
     );
   }
 }

@@ -20,6 +20,17 @@ class ListWithPreviews extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (items.isEmpty) {
+      return Container(
+        child: Center(
+          child: Text(
+            'Список пуст',
+            style: TextStyle(fontSize: 18),
+          ),
+        ),
+      );
+    }
+
     return ListView(
       children: ListTile.divideTiles(
         context: context,

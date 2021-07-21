@@ -22,6 +22,13 @@ class CategoryListScreen extends StatelessWidget {
           items: recipeNotifier.categories,
         ),
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.pushNamed(context, '/category-new');
+        },
+        label: const Text('Добавить категорию'),
+        icon: const Icon(Icons.add),
+      ),
     );
   }
 }

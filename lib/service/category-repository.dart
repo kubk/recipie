@@ -6,11 +6,6 @@ class CategoryRepository {
 
   CategoryRepository(this._db);
 
-  _modelToMap(Category category) => {
-        "id": category.id,
-        "title": category.title,
-      };
-
   Category _mapToModel(Map<String, dynamic> map) => Category(
         id: map["id"],
         title: map["title"],

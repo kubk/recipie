@@ -4,6 +4,7 @@ import 'package:recipie/screens/recipe-list-screen.dart';
 import 'package:recipie/screens/recipe-screen.dart';
 import 'package:recipie/service/category-repository.dart';
 import 'package:recipie/service/database-gateway.dart';
+import 'package:recipie/service/fixture-generator.dart';
 import 'package:recipie/service/recipe-repository.dart';
 import 'package:recipie/service/recipe-notifier.dart';
 import 'screens/category-list-screen.dart';
@@ -13,6 +14,7 @@ void main() {
   final categoryRepository = CategoryRepository(database);
   final recipeRepository = RecipeRepository(database);
   final recipeNotifier = RecipeNotifier(categoryRepository, recipeRepository);
+  final fixtureGenerator = FixtureGenerator(database);
 
   runApp(
     MultiProvider(
@@ -21,6 +23,7 @@ void main() {
       ],
       child: App(
         recipeNotifier: recipeNotifier,
+        fixtureGenerator: fixtureGenerator,
       ),
     ),
   );
@@ -28,8 +31,9 @@ void main() {
 
 class App extends StatefulWidget {
   final RecipeNotifier recipeNotifier;
+  final FixtureGenerator fixtureGenerator;
 
-  const App({Key? key, required this.recipeNotifier}) : super(key: key);
+  const App({Key? key, required this.recipeNotifier, required this.fixtureGenerator}) : super(key: key);
 
   @override
   _AppState createState() => _AppState();
@@ -38,23 +42,27 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   @override
   void initState() {
-    widget.recipeNotifier.loadRecipes();
+    widget.recipeNotifier.loadData();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       home: MaterialApp(
+        debugShowCheckedModeBanner: false,
         initialRoute: '/categories',
         routes: {
           '/categories': (context) => CategoryListScreen(),
+          '/category-new': (context) => RecipeListScreen(),
           '/recipes': (context) => RecipeListScreen(),
           '/recipe': (context) => RecipeScreen(),
+          '/recipe-new': (context) => RecipeScreen(),
         },
       ),
     );

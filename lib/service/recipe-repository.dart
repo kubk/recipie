@@ -12,13 +12,48 @@ class RecipeRepository {
         description: map["description"],
         imageUrl: map["imageUrl"],
         categoryId: map["categoryId"],
+        ingredients: map["ingredients"],
+        isCooked: map["isCooked"],
       );
 
   Future<List<Recipe>> getRecipes() async {
     final result = await (await _db.database).rawQuery(
-      "SELECT id, title, description, imageUrl, categoryId FROM recipe",
+      '''
+      SELECT id, title, description, imageUrl, categoryId, ingredients, isCooked
+      FROM recipe
+      ''',
     );
 
     return result.map(_mapToModel).toList();
+  }
+
+  Future<Recipe> getRecipeById(String recipeId) async {
+    final result = await (await _db.database).rawQuery(
+      '''
+      SELECT id, title, description, imageUrl, categoryId, ingredients, isCooked
+      FROM recipe
+      WHERE id = ?
+      ''',
+      [recipeId],
+    );
+
+    return result.map(_mapToModel).first;
+  }
+
+  Future<void> updateRecipe(String selectedRecipeId, Map<String, dynamic> map) async {
+    final count = await (await _db.database).rawUpdate('''
+      UPDATE recipe
+      SET title = ?, description = ?, ingredients = ?
+      WHERE recipe.id = ?
+    ''', [
+      map['title'],
+      map['description'],
+      map['ingredients'],
+      selectedRecipeId,
+    ]);
+
+    if (count < 1) {
+      throw new Exception("Database error: nothing has been updated");
+    }
   }
 }
