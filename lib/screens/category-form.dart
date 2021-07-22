@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:recipie/screens/category-list.dart';
 import 'package:recipie/service/recipe-notifier.dart';
 
 class CategoryForm extends StatefulWidget {
@@ -53,7 +52,7 @@ class _CategoryFormState extends State<CategoryForm> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text('Категория сохранёна')),
                 );
-                Navigator.of(context).pushNamed(CategoryList.route);
+                Navigator.of(context).pop();
               },
               child: Padding(
                 padding: const EdgeInsets.only(right: 16),
@@ -71,6 +70,7 @@ class _CategoryFormState extends State<CategoryForm> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: TextFormField(
+                textCapitalization: TextCapitalization.sentences,
                 controller: titleController,
                 style: TextStyle(fontSize: 18),
                 decoration: InputDecoration(

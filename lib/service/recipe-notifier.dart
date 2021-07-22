@@ -83,4 +83,8 @@ class RecipeNotifier extends ChangeNotifier {
     selectedRecipeId = null;
     notifyListeners();
   }
+
+  Future<List<Recipe>> getRecipesLike(String title) {
+    return recipeRepository.getRecipesLike(title);
+  }
 }

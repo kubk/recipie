@@ -34,6 +34,8 @@ dependencies:
   cached_network_image: ^3.1.0
   uuid: ^3.0.4
   image_picker: ^0.8.2
+  url_launcher: ^6.0.9
+  material_floating_search_bar: ^0.3.4
 
 dev_dependencies:
   flutter_test:

@@ -2,9 +2,9 @@ import 'package:recipie/model/recipe.dart';
 import 'package:recipie/service/database-gateway.dart';
 
 class RecipeRepository {
-  final DatabaseGateway _db;
+  final DatabaseGateway gateway;
 
-  RecipeRepository(this._db);
+  RecipeRepository(this.gateway);
 
   Recipe _mapToModel(Map<String, dynamic> map) => Recipe(
         id: map["id"],
@@ -18,7 +18,7 @@ class RecipeRepository {
       );
 
   Future<List<Recipe>> getRecipes() async {
-    final result = await (await _db.database).rawQuery(
+    final result = await (await gateway.database).rawQuery(
       '''
       SELECT id, title, description, imageUrl, categoryId, ingredients, isCooked, isCooked
       FROM recipe
@@ -28,8 +28,21 @@ class RecipeRepository {
     return result.map(_mapToModel).toList();
   }
 
+  Future<List<Recipe>> getRecipesLike(String title) async {
+    final result = await (await gateway.database).rawQuery(
+      '''
+      SELECT id, title, description, imageUrl, categoryId, ingredients, isCooked, isCooked
+      FROM recipe
+      WHERE title LIKE ?
+      ''',
+      ['%$title%'],
+    );
+
+    return result.map(_mapToModel).toList();
+  }
+
   Future<Recipe> getRecipeById(String recipeId) async {
-    final result = await (await _db.database).rawQuery(
+    final result = await (await gateway.database).rawQuery(
       '''
       SELECT id, title, description, imageUrl, categoryId, ingredients, isCooked, recipeUrl
       FROM recipe
@@ -45,12 +58,13 @@ class RecipeRepository {
     String selectedRecipeId,
     Map<String, dynamic> map,
   ) async {
-    final count = await (await _db.database).rawUpdate('''
+    final count = await (await gateway.database).rawUpdate('''
       UPDATE recipe
-      SET title = ?, description = ?, ingredients = ?, recipeUrl = ?, isCooked = ?
+      SET title = ?, imageUrl = ?, description = ?, ingredients = ?, recipeUrl = ?, isCooked = ?
       WHERE recipe.id = ?
     ''', [
       map['title'],
+      map['imageUrl'],
       map['description'],
       map['ingredients'],
       map['recipeUrl'],
@@ -64,9 +78,9 @@ class RecipeRepository {
   }
 
   Future<void> createRecipe(Map<String, dynamic> map) async {
-    final count = await (await _db.database).rawInsert('''
+    final count = await (await gateway.database).rawInsert('''
       INSERT INTO recipe  (id, title, imageUrl, categoryId, description, ingredients, isCooked, recipeUrl)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     ''', [
       map['id'],
       map['title'],

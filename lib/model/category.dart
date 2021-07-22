@@ -1,6 +1,4 @@
-import 'package:recipie/ui/list-with-previews.dart';
-
-class Category implements ListItem {
+class Category {
   final String id;
   final String title;
 
@@ -8,7 +6,4 @@ class Category implements ListItem {
     required this.id,
     required this.title,
   });
-
-  @override
-  String? get subtitle => null;
 }

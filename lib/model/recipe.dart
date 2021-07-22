@@ -1,6 +1,4 @@
-import 'package:recipie/ui/list-with-previews.dart';
-
-class Recipe implements ListItem {
+class Recipe {
   final String id;
   final String title;
   final String description;
@@ -20,7 +18,4 @@ class Recipe implements ListItem {
     required this.categoryId,
     required this.recipeUrl,
   });
-
-  @override
-  String? get subtitle => isCooked == 1 ? 'Приготовлен' : 'Не приготовлен';
 }

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:recipie/screens/category-form.dart';
-import 'package:recipie/screens/recipe-list.dart';
 import 'package:recipie/screens/recipe-form.dart';
+import 'package:recipie/screens/recipe-list.dart';
+import 'package:recipie/screens/search.dart';
 import 'package:recipie/service/category-repository.dart';
 import 'package:recipie/service/database-gateway.dart';
-import 'package:recipie/service/fixture-generator.dart';
-import 'package:recipie/service/recipe-repository.dart';
 import 'package:recipie/service/recipe-notifier.dart';
+import 'package:recipie/service/recipe-repository.dart';
 import 'screens/category-list.dart';
 
 void main() {
@@ -15,13 +15,12 @@ void main() {
   final categoryRepository = CategoryRepository(database);
   final recipeRepository = RecipeRepository(database);
   final recipeNotifier = RecipeNotifier(categoryRepository, recipeRepository);
-  final fixtureGenerator = FixtureGenerator(database);
 
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider<RecipeNotifier>(create: (_) => recipeNotifier),
-        Provider(create: (_) => fixtureGenerator),
+        Provider<RecipeRepository>(create: (_) => recipeRepository),
       ],
       child: App(),
     ),
@@ -45,21 +44,19 @@ class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Flutter demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        initialRoute: CategoryList.route,
-        routes: {
-          CategoryList.route: (context) => CategoryList(),
-          CategoryForm.route: (context) => CategoryForm(),
-          RecipeList.route: (context) => RecipeList(),
-          RecipeForm.route: (context) => RecipeForm(),
-        },
-      ),
+      debugShowCheckedModeBanner: false,
+      initialRoute: CategoryList.route,
+      routes: {
+        CategoryList.route: (context) => CategoryList(),
+        CategoryForm.route: (context) => CategoryForm(),
+        RecipeList.route: (context) => RecipeList(),
+        RecipeForm.route: (context) => RecipeForm(),
+        Search.route: (context) => Search(),
+      },
     );
   }
 }

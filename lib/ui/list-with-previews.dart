@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-abstract class ListItem {
+class ListItem {
   final String id;
   final String title;
 
-  String? get subtitle;
-
-  ListItem(this.id, this.title);
+  ListItem({
+    required this.id,
+    required this.title,
+  });
 }
 
 class ListWithPreviews extends StatelessWidget {
@@ -53,7 +54,6 @@ class ListWithPreviews extends StatelessWidget {
                   item.title,
                   style: TextStyle(fontSize: 18),
                 ),
-                subtitle: item.subtitle == null ? null : Text(item.subtitle!),
               ),
             )
             .toList(),

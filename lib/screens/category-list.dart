@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:recipie/screens/category-form.dart';
 import 'package:recipie/screens/recipe-list.dart';
+import 'package:recipie/screens/search.dart';
 import 'package:recipie/service/recipe-notifier.dart';
 import '../ui/list-with-previews.dart';
 
@@ -16,6 +17,17 @@ class CategoryList extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Категории'),
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: 20.0),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.of(context).pushNamed(Search.route);
+              },
+              child: Icon(Icons.search),
+            ),
+          ),
+        ],
       ),
       body: Consumer<RecipeNotifier>(
         builder: (context, recipeNotifier, child) => ListWithPreviews(
@@ -27,7 +39,9 @@ class CategoryList extends StatelessWidget {
             recipeNotifier.selectCategory(categoryId);
             Navigator.pushNamed(context, CategoryForm.route);
           },
-          items: recipeNotifier.categories,
+          items: recipeNotifier.categories
+              .map((e) => ListItem(id: e.id, title: e.title))
+              .toList(),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
