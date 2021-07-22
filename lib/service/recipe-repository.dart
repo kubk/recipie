@@ -14,12 +14,13 @@ class RecipeRepository {
         categoryId: map["categoryId"],
         ingredients: map["ingredients"],
         isCooked: map["isCooked"],
+        recipeUrl: map["recipeUrl"],
       );
 
   Future<List<Recipe>> getRecipes() async {
     final result = await (await _db.database).rawQuery(
       '''
-      SELECT id, title, description, imageUrl, categoryId, ingredients, isCooked
+      SELECT id, title, description, imageUrl, categoryId, ingredients, isCooked, isCooked
       FROM recipe
       ''',
     );
@@ -30,7 +31,7 @@ class RecipeRepository {
   Future<Recipe> getRecipeById(String recipeId) async {
     final result = await (await _db.database).rawQuery(
       '''
-      SELECT id, title, description, imageUrl, categoryId, ingredients, isCooked
+      SELECT id, title, description, imageUrl, categoryId, ingredients, isCooked, recipeUrl
       FROM recipe
       WHERE id = ?
       ''',
@@ -41,16 +42,40 @@ class RecipeRepository {
   }
 
   Future<void> updateRecipe(
-      String selectedRecipeId, Map<String, dynamic> map) async {
+    String selectedRecipeId,
+    Map<String, dynamic> map,
+  ) async {
     final count = await (await _db.database).rawUpdate('''
       UPDATE recipe
-      SET title = ?, description = ?, ingredients = ?
+      SET title = ?, description = ?, ingredients = ?, recipeUrl = ?, isCooked = ?
       WHERE recipe.id = ?
     ''', [
       map['title'],
       map['description'],
       map['ingredients'],
+      map['recipeUrl'],
+      map['isCooked'],
       selectedRecipeId,
+    ]);
+
+    if (count < 1) {
+      throw new Exception("Database error");
+    }
+  }
+
+  Future<void> createRecipe(Map<String, dynamic> map) async {
+    final count = await (await _db.database).rawInsert('''
+      INSERT INTO recipe  (id, title, imageUrl, categoryId, description, ingredients, isCooked, recipeUrl)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
+    ''', [
+      map['id'],
+      map['title'],
+      map["imageUrl"],
+      map["categoryId"],
+      map['description'],
+      map['ingredients'],
+      map['isCooked'],
+      map['recipeUrl'],
     ]);
 
     if (count < 1) {

@@ -8,6 +8,7 @@ class Recipe implements ListItem {
   final int isCooked;
   final String? imageUrl;
   final String categoryId;
+  final String? recipeUrl;
 
   Recipe({
     required this.id,
@@ -17,5 +18,9 @@ class Recipe implements ListItem {
     required this.ingredients,
     required this.imageUrl,
     required this.categoryId,
+    required this.recipeUrl,
   });
+
+  @override
+  String? get subtitle => isCooked == 1 ? 'Приготовлен' : 'Не приготовлен';
 }

@@ -8,4 +8,7 @@ class Category implements ListItem {
     required this.id,
     required this.title,
   });
+
+  @override
+  String? get subtitle => null;
 }

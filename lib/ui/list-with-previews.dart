@@ -5,6 +5,8 @@ abstract class ListItem {
   final String id;
   final String title;
 
+  String? get subtitle;
+
   ListItem(this.id, this.title);
 }
 
@@ -51,6 +53,7 @@ class ListWithPreviews extends StatelessWidget {
                   item.title,
                   style: TextStyle(fontSize: 18),
                 ),
+                subtitle: item.subtitle == null ? null : Text(item.subtitle!),
               ),
             )
             .toList(),

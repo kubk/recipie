@@ -6,7 +6,7 @@ class DatabaseGateway {
 
   Future<Database> _createDatabase() async {
     return openDatabase(
-      join(await getDatabasesPath(), 'recipe_database4.db'),
+      join(await getDatabasesPath(), 'recipe_database6.db'),
       onCreate: (db, version) async {
         await db.execute(
           'CREATE TABLE category(id TEXT PRIMARY KEY, title TEXT)',
@@ -21,12 +21,13 @@ class DatabaseGateway {
             ingredients TEXT,
             imageUrl TEXT,
             categoryId TEXT,
+            recipeUrl TEXT,
             FOREIGN KEY(categoryId) REFERENCES category(id)
           )
           ''',
         );
       },
-      version: 5,
+      version: 6,
     );
   }
 }

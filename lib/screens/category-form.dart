@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:recipie/screens/category-list-screen.dart';
+import 'package:recipie/screens/category-list.dart';
 import 'package:recipie/service/recipe-notifier.dart';
 
 class CategoryForm extends StatefulWidget {
@@ -14,29 +14,18 @@ class CategoryForm extends StatefulWidget {
 }
 
 class _CategoryFormState extends State<CategoryForm> {
-  final TextEditingController titleController = TextEditingController();
-  bool _isSaveVisible = false;
+  late TextEditingController titleController;
 
   @override
   void initState() {
     super.initState();
 
+    titleController = TextEditingController();
+
     if (context.read<RecipeNotifier>().selectedCategoryId != null) {
       final category = context.read<RecipeNotifier>().selectedCategory;
       titleController.text = category.title;
-    } else {
-      titleController.text = '';
     }
-
-    titleController.addListener(() {
-      final isEmpty = titleController.value.text.isEmpty;
-      final isSaveVisible = !isEmpty;
-      if (isSaveVisible != _isSaveVisible) {
-        setState(() {
-          _isSaveVisible = isSaveVisible;
-        });
-      }
-    });
   }
 
   @override
@@ -68,13 +57,11 @@ class _CategoryFormState extends State<CategoryForm> {
               },
               child: Padding(
                 padding: const EdgeInsets.only(right: 16),
-                child: _isSaveVisible
-                    ? Icon(
-                        Icons.check,
-                        color: Colors.white,
-                        size: 24.0,
-                      )
-                    : null,
+                child: Icon(
+                  Icons.check,
+                  color: Colors.white,
+                  size: 24.0,
+                ),
               ),
             )
           ],

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:recipie/screens/category-form.dart';
-import 'package:recipie/screens/recipe-list-screen.dart';
+import 'package:recipie/screens/recipe-list.dart';
 import 'package:recipie/screens/recipe-form.dart';
 import 'package:recipie/service/category-repository.dart';
 import 'package:recipie/service/database-gateway.dart';
 import 'package:recipie/service/fixture-generator.dart';
 import 'package:recipie/service/recipe-repository.dart';
 import 'package:recipie/service/recipe-notifier.dart';
-import 'screens/category-list-screen.dart';
+import 'screens/category-list.dart';
 
 void main() {
   final database = DatabaseGateway();

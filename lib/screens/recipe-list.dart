@@ -27,6 +27,7 @@ class RecipeList extends StatelessWidget {
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
+            recipeNotifier.clearRecipeId();
             Navigator.pushNamed(context, RecipeForm.route);
           },
           label: const Text('Добавить рецепт'),

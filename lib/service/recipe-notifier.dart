@@ -55,7 +55,12 @@ class RecipeNotifier extends ChangeNotifier {
   }
 
   Future<void> submitRecipe(Map<String, dynamic> form) async {
-    await this.recipeRepository.updateRecipe(selectedRecipeId!, form);
+    if (selectedRecipeId == null) {
+      form['id'] = Uuid().v4();
+      await this.recipeRepository.createRecipe(form);
+    } else {
+      await this.recipeRepository.updateRecipe(selectedRecipeId!, form);
+    }
     _loadRecipes();
   }
 
@@ -71,6 +76,11 @@ class RecipeNotifier extends ChangeNotifier {
 
   void clearCategoryId() {
     selectedCategoryId = null;
+    notifyListeners();
+  }
+
+  void clearRecipeId() {
+    selectedRecipeId = null;
     notifyListeners();
   }
 }
