@@ -7,7 +7,35 @@ import 'package:recipie/service/recipe-notifier.dart';
 
 final double imageHeight = 310;
 
-class RecipeScreen extends StatelessWidget {
+class RecipeForm extends StatefulWidget {
+  static String route = 'recipe-form';
+
+  @override
+  _RecipeFormState createState() => _RecipeFormState();
+}
+
+class _RecipeFormState extends State<RecipeForm> {
+  final titleController = TextEditingController();
+  final descriptionController = TextEditingController();
+  final ingredientsController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    final recipe = context.read<RecipeNotifier>().selectedRecipe;
+    titleController.text = recipe.title;
+    descriptionController.text = recipe.description;
+    ingredientsController.text = recipe.ingredients;
+  }
+
+  @override
+  void dispose() {
+    titleController.dispose();
+    descriptionController.dispose();
+    ingredientsController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -18,8 +46,13 @@ class RecipeScreen extends StatelessWidget {
             actions: [
               GestureDetector(
                 onTap: () async {
-                  await recipeNotifier.submitRecipe();
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Рецепт сохранён')));
+                  await recipeNotifier.submitRecipe({
+                    "title": titleController.value.text,
+                    "ingredients": ingredientsController.value.text,
+                    "description": descriptionController.value.text,
+                  });
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(SnackBar(content: Text('Рецепт сохранён')));
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(right: 16),
@@ -49,7 +82,7 @@ class RecipeScreen extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: TextFormField(
-                  controller: recipeNotifier.titleController,
+                  controller: titleController,
                   style: TextStyle(fontSize: 18),
                   decoration: InputDecoration(
                     border: UnderlineInputBorder(),
@@ -60,7 +93,7 @@ class RecipeScreen extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: TextFormField(
-                  controller: recipeNotifier.ingredientsController,
+                  controller: ingredientsController,
                   keyboardType: TextInputType.multiline,
                   minLines: 1,
                   maxLines: 12,
@@ -74,7 +107,7 @@ class RecipeScreen extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: TextFormField(
-                  controller: recipeNotifier.descriptionController,
+                  controller: descriptionController,
                   keyboardType: TextInputType.multiline,
                   minLines: 1,
                   maxLines: 12,
@@ -84,7 +117,7 @@ class RecipeScreen extends StatelessWidget {
                     labelText: 'Описание',
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),

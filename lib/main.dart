@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:recipie/screens/category-form.dart';
 import 'package:recipie/screens/recipe-list-screen.dart';
-import 'package:recipie/screens/recipe-screen.dart';
+import 'package:recipie/screens/recipe-form.dart';
 import 'package:recipie/service/category-repository.dart';
 import 'package:recipie/service/database-gateway.dart';
 import 'package:recipie/service/fixture-generator.dart';
@@ -20,20 +21,15 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider<RecipeNotifier>(create: (_) => recipeNotifier),
+        Provider(create: (_) => fixtureGenerator),
       ],
-      child: App(
-        recipeNotifier: recipeNotifier,
-        fixtureGenerator: fixtureGenerator,
-      ),
+      child: App(),
     ),
   );
 }
 
 class App extends StatefulWidget {
-  final RecipeNotifier recipeNotifier;
-  final FixtureGenerator fixtureGenerator;
-
-  const App({Key? key, required this.recipeNotifier, required this.fixtureGenerator}) : super(key: key);
+  const App({Key? key}) : super(key: key);
 
   @override
   _AppState createState() => _AppState();
@@ -42,8 +38,8 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   @override
   void initState() {
-    widget.recipeNotifier.loadData();
     super.initState();
+    context.read<RecipeNotifier>().loadData();
   }
 
   @override
@@ -56,13 +52,12 @@ class _AppState extends State<App> {
       ),
       home: MaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: '/categories',
+        initialRoute: CategoryList.route,
         routes: {
-          '/categories': (context) => CategoryListScreen(),
-          '/category-new': (context) => RecipeListScreen(),
-          '/recipes': (context) => RecipeListScreen(),
-          '/recipe': (context) => RecipeScreen(),
-          '/recipe-new': (context) => RecipeScreen(),
+          CategoryList.route: (context) => CategoryList(),
+          CategoryForm.route: (context) => CategoryForm(),
+          RecipeList.route: (context) => RecipeList(),
+          RecipeForm.route: (context) => RecipeForm(),
         },
       ),
     );

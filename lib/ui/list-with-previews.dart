@@ -13,9 +13,11 @@ class ListWithPreviews extends StatelessWidget {
     Key? key,
     required this.onTap,
     required this.items,
+    this.onLongPress,
   }) : super(key: key);
 
   final Function(String) onTap;
+  final Function(String)? onLongPress;
   final List<ListItem> items;
 
   @override
@@ -39,6 +41,11 @@ class ListWithPreviews extends StatelessWidget {
               (item) => ListTile(
                 onTap: () {
                   this.onTap(item.id);
+                },
+                onLongPress: () {
+                  if (this.onLongPress != null) {
+                    this.onLongPress!(item.id);
+                  }
                 },
                 title: Text(
                   item.title,

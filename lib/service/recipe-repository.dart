@@ -40,7 +40,8 @@ class RecipeRepository {
     return result.map(_mapToModel).first;
   }
 
-  Future<void> updateRecipe(String selectedRecipeId, Map<String, dynamic> map) async {
+  Future<void> updateRecipe(
+      String selectedRecipeId, Map<String, dynamic> map) async {
     final count = await (await _db.database).rawUpdate('''
       UPDATE recipe
       SET title = ?, description = ?, ingredients = ?
@@ -53,7 +54,7 @@ class RecipeRepository {
     ]);
 
     if (count < 1) {
-      throw new Exception("Database error: nothing has been updated");
+      throw new Exception("Database error");
     }
   }
 }
