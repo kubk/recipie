@@ -10,7 +10,7 @@
 
     </queries>
    <application
-        android:label="recipie"
+        android:label="Recipie"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
