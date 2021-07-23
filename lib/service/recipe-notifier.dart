@@ -9,6 +9,8 @@ class RecipeNotifier extends ChangeNotifier {
   final CategoryRepository categoryRepository;
   final RecipeRepository recipeRepository;
 
+  SearchResult? selectedSurprise;
+
   RecipeNotifier(this.categoryRepository, this.recipeRepository);
 
   List<Category> categories = [];
@@ -84,7 +86,11 @@ class RecipeNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<List<Recipe>> getRecipesLike(String title) {
+  Future<List<SearchResult>> getRecipesLike(String title) {
     return recipeRepository.getRecipesLike(title);
+  }
+
+  void selectSurprise(SearchResult e) {
+    selectedSurprise = e;
   }
 }

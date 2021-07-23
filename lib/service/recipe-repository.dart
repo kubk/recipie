@@ -1,6 +1,20 @@
 import 'package:recipie/model/recipe.dart';
 import 'package:recipie/service/database-gateway.dart';
 
+class SearchResult {
+  final String id;
+  final String title;
+  final String? imageUrl;
+  final String type;
+
+  SearchResult({
+    required this.id,
+    required this.title,
+    required this.imageUrl,
+    required this.type,
+  });
+}
+
 class RecipeRepository {
   final DatabaseGateway gateway;
 
@@ -17,6 +31,13 @@ class RecipeRepository {
         recipeUrl: map["recipeUrl"],
       );
 
+  SearchResult _mapToSearchResult(Map<String, dynamic> map) => SearchResult(
+        id: map['id'],
+        title: map['title'],
+        imageUrl: map['imageUrl'],
+        type: map['type'],
+      );
+
   Future<List<Recipe>> getRecipes() async {
     final result = await (await gateway.database).rawQuery(
       '''
@@ -28,17 +49,25 @@ class RecipeRepository {
     return result.map(_mapToModel).toList();
   }
 
-  Future<List<Recipe>> getRecipesLike(String title) async {
+  Future<List<SearchResult>> getRecipesLike(String title) async {
+    if (title.isEmpty) {
+      return [];
+    }
+
     final result = await (await gateway.database).rawQuery(
       '''
-      SELECT id, title, description, imageUrl, categoryId, ingredients, isCooked, isCooked
+      SELECT id, title, imageUrl, "recipe" as type
       FROM recipe
       WHERE title LIKE ?
+      UNION
+      SELECT id, title, imageUrl, "surprise" as type
+      FROM easter
+      WHERE title LIKE ?
       ''',
-      ['%$title%'],
+      ['%$title%', '%$title%'],
     );
 
-    return result.map(_mapToModel).toList();
+    return result.map(_mapToSearchResult).toList();
   }
 
   Future<Recipe> getRecipeById(String recipeId) async {

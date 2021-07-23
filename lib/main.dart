@@ -9,6 +9,7 @@ import 'package:recipie/service/database-gateway.dart';
 import 'package:recipie/service/recipe-notifier.dart';
 import 'package:recipie/service/recipe-repository.dart';
 import 'screens/category-list.dart';
+import 'screens/easter-egg.dart';
 
 void main() {
   final database = DatabaseGateway();
@@ -56,6 +57,7 @@ class _AppState extends State<App> {
         RecipeList.route: (context) => RecipeList(),
         RecipeForm.route: (context) => RecipeForm(),
         Search.route: (context) => Search(),
+        EasterEgg.route: (context) => EasterEgg(),
       },
     );
   }
