@@ -16,9 +16,9 @@ class SearchResult {
 }
 
 class RecipeRepository {
-  final DatabaseGateway gateway;
+  final DatabaseGateway _gateway;
 
-  RecipeRepository(this.gateway);
+  RecipeRepository(this._gateway);
 
   Recipe _mapToModel(Map<String, dynamic> map) => Recipe(
         id: map["id"],
@@ -39,7 +39,7 @@ class RecipeRepository {
       );
 
   Future<List<Recipe>> getRecipes() async {
-    final result = await (await gateway.database).rawQuery(
+    final result = await (await _gateway.database).rawQuery(
       '''
       SELECT id, title, description, imageUrl, categoryId, ingredients, isCooked, isCooked
       FROM recipe
@@ -54,7 +54,7 @@ class RecipeRepository {
       return [];
     }
 
-    final result = await (await gateway.database).rawQuery(
+    final result = await (await _gateway.database).rawQuery(
       '''
       SELECT id, title, imageUrl, "recipe" as type
       FROM recipe
@@ -71,7 +71,7 @@ class RecipeRepository {
   }
 
   Future<Recipe> getRecipeById(String recipeId) async {
-    final result = await (await gateway.database).rawQuery(
+    final result = await (await _gateway.database).rawQuery(
       '''
       SELECT id, title, description, imageUrl, categoryId, ingredients, isCooked, recipeUrl
       FROM recipe
@@ -87,7 +87,7 @@ class RecipeRepository {
     String selectedRecipeId,
     Map<String, dynamic> map,
   ) async {
-    final count = await (await gateway.database).rawUpdate('''
+    final count = await (await _gateway.database).rawUpdate('''
       UPDATE recipe
       SET title = ?, imageUrl = ?, description = ?, ingredients = ?, recipeUrl = ?, isCooked = ?
       WHERE recipe.id = ?
@@ -107,7 +107,7 @@ class RecipeRepository {
   }
 
   Future<void> createRecipe(Map<String, dynamic> map) async {
-    final count = await (await gateway.database).rawInsert('''
+    final count = await (await _gateway.database).rawInsert('''
       INSERT INTO recipe  (id, title, imageUrl, categoryId, description, ingredients, isCooked, recipeUrl)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     ''', [

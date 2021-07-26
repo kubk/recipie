@@ -6,12 +6,12 @@ import 'package:recipie/service/recipe-repository.dart';
 import 'package:uuid/uuid.dart';
 
 class RecipeNotifier extends ChangeNotifier {
-  final CategoryRepository categoryRepository;
-  final RecipeRepository recipeRepository;
+  final CategoryRepository _categoryRepository;
+  final RecipeRepository _recipeRepository;
 
   SearchResult? selectedSurprise;
 
-  RecipeNotifier(this.categoryRepository, this.recipeRepository);
+  RecipeNotifier(this._categoryRepository, this._recipeRepository);
 
   List<Category> categories = [];
   List<Recipe> recipes = [];
@@ -43,14 +43,14 @@ class RecipeNotifier extends ChangeNotifier {
   }
 
   _loadCategories() {
-    this.categoryRepository.getCategories().then((value) {
+    this._categoryRepository.getCategories().then((value) {
       categories = value;
       notifyListeners();
     });
   }
 
   _loadRecipes() {
-    this.recipeRepository.getRecipes().then((value) {
+    this._recipeRepository.getRecipes().then((value) {
       recipes = value;
       notifyListeners();
     });
@@ -59,9 +59,9 @@ class RecipeNotifier extends ChangeNotifier {
   Future<void> submitRecipe(Map<String, dynamic> form) async {
     if (selectedRecipeId == null) {
       form['id'] = Uuid().v4();
-      await this.recipeRepository.createRecipe(form);
+      await this._recipeRepository.createRecipe(form);
     } else {
-      await this.recipeRepository.updateRecipe(selectedRecipeId!, form);
+      await this._recipeRepository.updateRecipe(selectedRecipeId!, form);
     }
     _loadRecipes();
   }
@@ -69,9 +69,9 @@ class RecipeNotifier extends ChangeNotifier {
   Future<void> submitCategory(Map<String, String> form) async {
     if (selectedCategoryId == null) {
       form['id'] = Uuid().v4();
-      await this.categoryRepository.createCategory(form);
+      await this._categoryRepository.createCategory(form);
     } else {
-      await this.categoryRepository.updateCategory(selectedCategoryId!, form);
+      await this._categoryRepository.updateCategory(selectedCategoryId!, form);
     }
     _loadCategories();
   }
@@ -87,10 +87,10 @@ class RecipeNotifier extends ChangeNotifier {
   }
 
   Future<List<SearchResult>> getRecipesLike(String title) {
-    return recipeRepository.getRecipesLike(title);
+    return _recipeRepository.getRecipesLike(title);
   }
 
-  void selectSurprise(SearchResult e) {
-    selectedSurprise = e;
+  void selectSurprise(SearchResult searchResult) {
+    selectedSurprise = searchResult;
   }
 }
