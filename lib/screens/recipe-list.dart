@@ -93,8 +93,6 @@ class RecipeList extends StatelessWidget {
                                         ),
                                       )
                                     : Container(
-                                        // height: height,
-                                        // width: height,
                                         child: Image.file(
                                           File(e.imageUrl!),
                                           fit: BoxFit.fitHeight,

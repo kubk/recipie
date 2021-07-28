@@ -72,24 +72,7 @@ class DatabaseGateway {
     ")
     ''';
 
-    final createEasterEggSql = '''
-    INSERT INTO easter (id, title, imageUrl) VALUES
-    ("1", "Любовь", "https://ik.imagekit.io/recipieapp/photo_2021-01-03_19-26-44_QYYgrUcVrJ.jpg"),
-    ("2", "Радость первого выступления", "https://ik.imagekit.io/recipieapp/2021-07-23_19-23_TEGDGrT5F-4.png"),
-    ("3", "Счастье", "https://ik.imagekit.io/recipieapp/2021-07-23_19-26_xDDsPOr66U.png"),
-    ("4", "Лучший день рождения", "https://ik.imagekit.io/recipieapp/2020-10-18_11-09-53_m_Yobd2_N.JPG?updatedAt=1627056393836"),
-    ("5", "Путешествия", "https://ik.imagekit.io/recipieapp/2020-10-17_14-05-52_Eyp0Dcx7Cm.JPG"),
-    ("6", "Вдохновение", "https://ik.imagekit.io/recipieapp/2021-07-23_19-10_UbAeM6UDeQ.png"),
-    ("7", "Красота", "https://ik.imagekit.io/recipieapp/2021-07-23_19-24_OEVkXGoIQy.png"),
-    ("8", "С блеском пройденные экзамены", "https://ik.imagekit.io/recipieapp/photo_2021-03-13_14-04-35_1qr6MnkaU.jpg"),
-    ("9", "Покорённые вершины", "https://ik.imagekit.io/recipieapp/2021-01-02_15-15-11_l08yBqv1Bn.JPG"),
-    ("10", "Мрачный макияж", "https://ik.imagekit.io/recipieapp/IMG_7039_TS66fSeSZr.jpg"),
-    ("11", "Обилие вкуснейшей еды", "https://ik.imagekit.io/recipieapp/2020-12-24_20-12-59_qvXeUn3zy.JPG"),
-    ("12", "Совместные кулинарные эксперименты", "https://ik.imagekit.io/recipieapp/1617449756018_m-6kpMtsoV.jpg")
-    ''';
-
     await db.rawInsert(createCategoriesSql);
     await db.rawInsert(createRecipesSql);
-    await db.rawInsert(createEasterEggSql);
   }
 }
