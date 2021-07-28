@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:provider/provider.dart';
-import 'package:recipie/model/recipe.dart';
 import 'package:recipie/screens/easter-egg.dart';
 import 'package:recipie/screens/recipe-form.dart';
 import 'package:recipie/service/recipe-notifier.dart';
@@ -68,7 +67,6 @@ class _SearchState extends State<Search> {
                   child: CircularButton(
                     icon: const Icon(
                       Icons.search,
-                      // color: Colors.white,
                     ),
                     onPressed: () {},
                   ),

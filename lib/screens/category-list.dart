@@ -40,7 +40,13 @@ class CategoryList extends StatelessWidget {
             Navigator.pushNamed(context, CategoryForm.route);
           },
           items: recipeNotifier.categories
-              .map((e) => ListItem(id: e.id, title: e.title))
+              .map(
+                (e) => ListItem(
+                  id: e.id,
+                  title: e.title,
+                  subtitle: 'Рецептов: ${e.recipeCount}',
+                ),
+              )
               .toList(),
         ),
       ),

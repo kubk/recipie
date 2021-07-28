@@ -13,7 +13,7 @@ class RecipeNotifier extends ChangeNotifier {
 
   RecipeNotifier(this._categoryRepository, this._recipeRepository);
 
-  List<Category> categories = [];
+  List<CategoryWithRecipes> categories = [];
   List<Recipe> recipes = [];
 
   String? selectedCategoryId;
@@ -31,7 +31,7 @@ class RecipeNotifier extends ChangeNotifier {
       .where((element) => element.categoryId == selectedCategoryId)
       .toList();
 
-  Category get selectedCategory =>
+  CategoryWithRecipes get selectedCategory =>
       categories.firstWhere((element) => element.id == selectedCategoryId);
 
   Recipe get selectedRecipe =>

@@ -216,7 +216,7 @@ class _RecipeFormState extends State<RecipeForm> {
                       ),
                     ),
                     Positioned(
-                      top: 20,
+                      top: 18,
                       right: 0,
                       child: LaunchUrl(onTap: () {
                         _launchURL(recipeUrlController.value.text);

@@ -20,7 +20,7 @@ class RecipeRepository {
 
   RecipeRepository(this._gateway);
 
-  Recipe _mapToModel(Map<String, dynamic> map) => Recipe(
+  Recipe _mapToRecipe(Map<String, dynamic> map) => Recipe(
         id: map["id"],
         title: map["title"],
         description: map["description"],
@@ -41,12 +41,12 @@ class RecipeRepository {
   Future<List<Recipe>> getRecipes() async {
     final result = await (await _gateway.database).rawQuery(
       '''
-      SELECT id, title, description, imageUrl, categoryId, ingredients, isCooked, isCooked
+      SELECT id, title, description, imageUrl, categoryId, ingredients, isCooked, recipeUrl
       FROM recipe
       ''',
     );
 
-    return result.map(_mapToModel).toList();
+    return result.map(_mapToRecipe).toList();
   }
 
   Future<List<SearchResult>> getRecipesLike(String title) async {
@@ -80,7 +80,7 @@ class RecipeRepository {
       [recipeId],
     );
 
-    return result.map(_mapToModel).first;
+    return result.map(_mapToRecipe).first;
   }
 
   Future<void> updateRecipe(

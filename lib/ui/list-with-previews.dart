@@ -4,10 +4,12 @@ import 'package:flutter/widgets.dart';
 class ListItem {
   final String id;
   final String title;
+  final String? subtitle;
 
   ListItem({
     required this.id,
     required this.title,
+    this.subtitle,
   });
 }
 
@@ -50,6 +52,7 @@ class ListWithPreviews extends StatelessWidget {
                     this.onLongPress!(item.id);
                   }
                 },
+                subtitle: item.subtitle == null ? null : Text(item.subtitle!),
                 title: Text(
                   item.title,
                   style: TextStyle(fontSize: 18),

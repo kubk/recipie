@@ -6,18 +6,21 @@ class CategoryRepository {
 
   CategoryRepository(this._gateway);
 
-  Category _mapToModel(Map<String, dynamic> map) => Category(
-        id: map["id"],
-        title: map["title"],
-      );
-
-  Future<List<Category>> getCategories() async {
+  Future<List<CategoryWithRecipes>> getCategories() async {
     final result = await (await _gateway.database).rawQuery('''
-      SELECT id, title
-      FROM category
+      SELECT c.id, c.title, COUNT(r.id) as recipeCount
+      FROM category c
+      LEFT JOIN recipe r ON r.categoryId = c.id 
+      GROUP BY c.id
+      ORDER BY c.title ASC
     ''');
 
-    return result.map(_mapToModel).toList();
+    return result
+        .map((Map<String, dynamic> map) => CategoryWithRecipes(
+            id: map['id'],
+            title: map['title'],
+            recipeCount: map['recipeCount']))
+        .toList();
   }
 
   Future<void> createCategory(Map<String, dynamic> map) async {
