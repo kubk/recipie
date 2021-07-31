@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:recipie/model/category.dart';
 import 'package:recipie/model/recipe.dart';
+import 'package:recipie/model/search-result.dart';
 import 'package:recipie/service/category-repository.dart';
 import 'package:recipie/service/recipe-repository.dart';
 import 'package:uuid/uuid.dart';

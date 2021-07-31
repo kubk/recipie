@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:provider/provider.dart';
+import 'package:recipie/model/search-result.dart';
 import 'package:recipie/screens/easter-egg.dart';
 import 'package:recipie/screens/recipe-form.dart';
 import 'package:recipie/service/recipe-notifier.dart';
-import 'package:recipie/service/recipe-repository.dart';
 
 class Search extends StatefulWidget {
   static String route = 'search';

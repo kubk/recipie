@@ -16,10 +16,13 @@ class CategoryRepository {
     ''');
 
     return result
-        .map((Map<String, dynamic> map) => CategoryWithRecipes(
+        .map(
+          (Map<String, dynamic> map) => CategoryWithRecipes(
             id: map['id'],
             title: map['title'],
-            recipeCount: map['recipeCount']))
+            recipeCount: map['recipeCount'],
+          ),
+        )
         .toList();
   }
 

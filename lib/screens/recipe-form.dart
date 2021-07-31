@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:recipie/service/local-file-uploader.dart';
 import 'package:recipie/service/recipe-notifier.dart';
+import 'package:recipie/ui/image-select.dart';
 import 'package:recipie/ui/launch-url.dart';
 import 'package:recipie/ui/recipe-image.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -60,7 +61,25 @@ class _RecipeFormState extends State<RecipeForm> {
     super.dispose();
   }
 
+  _pickImage() async {
+    final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (image == null) {
+      return;
+    }
+    final temporaryImage = await LocalFileUploader().upload(File(image.path));
+    setState(() {
+      _temporaryImage = temporaryImage;
+    });
+  }
+
   Widget _buildImage(RecipeNotifier recipeNotifier) {
+    if (_temporaryImage != null) {
+      return Container(
+        height: imageHeight,
+        child: Image.file(_temporaryImage!),
+      );
+    }
+
     final isImageSaved = recipeNotifier.selectedRecipeId != null &&
         recipeNotifier.selectedRecipe.imageUrl != null;
 
@@ -68,46 +87,33 @@ class _RecipeFormState extends State<RecipeForm> {
       return RecipeImage(
         imageUrl: recipeNotifier.selectedRecipe.imageUrl!,
         height: imageHeight,
-      );
-    }
-
-    if (_temporaryImage == null) {
-      return Padding(
-        padding: const EdgeInsets.all(16),
-        child: GestureDetector(
-          onTap: () async {
-            final image =
-                await ImagePicker().pickImage(source: ImageSource.gallery);
-            if (image == null) {
-              return;
-            }
-            final temporaryImage =
-                await LocalFileUploader().upload(File(image.path));
-            setState(() {
-              _temporaryImage = temporaryImage;
-            });
-          },
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(
-                color: Colors.black,
-                width: 2,
+        onTap: () => showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text('Замена изображения'),
+            content: const Text('Вы уверены, что хотите заменить изображение?'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Отмена'),
               ),
-            ),
-            height: imageHeight,
-            child: Center(
-              child: Icon(Icons.add_a_photo, size: 48),
-            ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  _pickImage();
+                },
+                child: const Text('Заменить'),
+              ),
+            ],
           ),
         ),
       );
-    } else {
-      return Container(
-        height: imageHeight,
-        child: Image.file(_temporaryImage!),
-      );
     }
+
+    return ImageSelect(
+      onTap: _pickImage,
+      imageHeight: imageHeight,
+    );
   }
 
   void _launchURL(url) async {
@@ -124,29 +130,32 @@ class _RecipeFormState extends State<RecipeForm> {
         builder: (context, recipeNotifier, child) => Scaffold(
           appBar: AppBar(
             title: Text(
-              recipeNotifier.selectedRecipeId != null
-                  ? 'Редактирование рецепта'
-                  : 'Создание рецепта',
+              recipeNotifier.selectedRecipeId == null
+                  ? 'Создание рецепта'
+                  : 'Редактирование рецепта',
             ),
             actions: [
               GestureDetector(
                 onTap: () async {
                   await recipeNotifier.submitRecipe({
-                    "imageUrl": recipeNotifier.selectedRecipeId == null
-                        ? _temporaryImage == null
+                    'imageUrl': _temporaryImage == null
+                        ? recipeNotifier.selectedRecipe.imageUrl == null
                             ? null
-                            : _temporaryImage!.absolute.path
-                        : recipeNotifier.selectedRecipe.imageUrl,
-                    "title": titleController.value.text,
-                    "ingredients": ingredientsController.value.text,
-                    "description": descriptionController.value.text,
-                    "isCooked": isCookedController.value.text == '1' ? 1 : 0,
-                    "categoryId": recipeNotifier.selectedCategoryId,
-                    "recipeUrl": recipeUrlController.value.text,
+                            : recipeNotifier.selectedRecipe.imageUrl
+                        : _temporaryImage!.absolute.path,
+                    'title': titleController.value.text,
+                    'ingredients': ingredientsController.value.text,
+                    'description': descriptionController.value.text,
+                    'isCooked': isCookedController.value.text == '1' ? 1 : 0,
+                    'categoryId': recipeNotifier.selectedCategoryId,
+                    'recipeUrl': recipeUrlController.value.text,
                   });
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
                       content: Text('Рецепт сохранён'),
-                      backgroundColor: Colors.green));
+                      backgroundColor: Colors.green,
+                    ),
+                  );
                   Navigator.of(context).pop();
                 },
                 child: Padding(
